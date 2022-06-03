@@ -36,7 +36,7 @@ $0 -if <INFILE> [-pcrf <PCR DATA FILE>] [-ha <HANDLE>] [-of <OUTFILE>] [-h]\n
 EXAMPLE:
 $0 -if sealedfile\n
 OPTIONS:
--if|--infile\tREQUIRED: Input file to unseal (generated with seal.sh)
+-if|--infile\tInput file to unseal (generated with seal.sh)
 -pcrf|--pcrfile\tFile with PCR indexes + values. See notes below.
 -ha|--handle\tOPTIONAL: Handle for primary storage key. Default = 80000000
 -of|--outfile\tOPTIONAL: Output file. Default = <inputfile>.unsealed
@@ -59,6 +59,12 @@ pcrmaskgen() {
     temp=$(echo "ibase=10;obase=16;$acc" | bc)
     temp=$(printf '0%.0s' {1..6})$temp
     echo "${temp:(-6)}"
+}
+trim() {
+    local var="$*"
+    var="${var#"${var%%[![:space:]]*}"}"
+    var="${var%"${var##*[![:space:]]}"}"   
+    printf '%s' "$var"
 }
 # <<< END HELPERS
 
@@ -117,11 +123,14 @@ if $FILEMODE; then
     declare -a PCRLIST; declare -a PCRVALUES
     # read two lines at a time and build the arrays
     while read -r l1; do
+        # trim leading/trailing spaces without condensing multiple spaces
+        l1=$(trim "$l1")
         # line 1 must be a one or two digit number (checks if empty at the same time)
         [[ $l1 =~ $REGEX_PCRF ]] || die "The index '$l1' in the PCR data file is not numeric only. Please check."
         # and it cant be higher than 23
         [ "$l1" -gt 23 ] && die "The index '$l1' in the PCR data file is too high"
         read -r l2;
+        l2=$(trim "$l2")
         # second line must start with s| or f| and needs at least one character after
         [[ $l2 =~ $REGEX_PCRF_VAL ]] || die "A value in the PCR data file is empty or does not contain the s| or f| prefix. Please check."
         # append the values to the array
