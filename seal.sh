@@ -35,12 +35,12 @@ $0 -if <INFILE> -pcr <PCRS> -pcrf <PCR DATA FILE> [-ha <HANDLE>] [-of <OUTFILE>]
 EXAMPLE:
 $0 -if hello.txt -pcr 16,23\n
 OPTIONS:
--h|--help\tOPTIONAL: Show this help page
--if|--infile\tREQUIRED: Input file to seal
+-if|--infile\tInput file to seal
 -pcr|--pcrlist\tComma-separated list of PCR indexes OR
 -pcrf|--pcrfile\tFile with PCR indexes + values. See notes below.
 -ha|--handle\tOPTIONAL: Handle for primary storage key. Default = 80000000
--of|--outfile\tOPTIONAL: Output file. Default = <inputfile>.sealed\n
+-of|--outfile\tOPTIONAL: Output file. Default = <inputfile>.sealed
+-h|--help\tOPTIONAL: Show this help page\n
 GENERAL NOTES:
 - Must be run in the TPM simulator environment.
 - There must already be a parent handler. If none is specified,default 80000000 will be used.\n
@@ -66,6 +66,12 @@ pcrmaskgen() {
     temp=$(echo "ibase=10;obase=16;$acc" | bc)
     temp=$(printf '0%.0s' {1..6})$temp
     echo "${temp:(-6)}"
+}
+trim() {
+    local var="$*"
+    var="${var#"${var%%[![:space:]]*}"}"
+    var="${var%"${var##*[![:space:]]}"}"   
+    printf '%s' "$var"
 }
 # <<< END HELPERS
 
@@ -112,6 +118,8 @@ try "/bin/rm -rf $TEMP; mkdir -p $TEMP"
 # check pcr mode
 if ! [ -z $PCRSTRING ]; then
     echo -ne "${CONSOLE_INFO}Processing PCR list... "
+    # remove spaces
+    PCRSTRING=$(echo "$PCRSTRING" | tr -d " ")
     # convert the pcrlist (comma separated) to an array
     oIFS="$IFS"; IFS=","; declare -a PCRARRAY=($PCRSTRING); IFS="$oIFS"; unset oIFS
     # check if any number is too high
@@ -130,11 +138,14 @@ else
     declare -a PCRLIST; declare -a PCRVALUES
     # read two lines at a time and build the arrays
     while read -r l1; do
+        # trim leading/trailing spaces without condensing multiple spaces
+        l1=$(trim "$l1")
         # line 1 must be a one or two digit number (checks if empty at the same time)
         [[ $l1 =~ $REGEX_PCRF ]] || die "The index '$l1' in the PCR data file is not numeric only. Please check."
         # and it cant be higher than 23
         [ "$l1" -gt 23 ] && die "The index '$l1' in the PCR data file is too high"
         read -r l2;
+        l2=$(trim "$l2")
         # second line must start with s| or f| and needs at least one character after
         [[ $l2 =~ $REGEX_PCRF_VAL ]] || die "A value in the PCR data file is empty or does not contain the s| or f| prefix. Please check."
         # append the values to the array
