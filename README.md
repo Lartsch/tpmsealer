@@ -11,18 +11,18 @@ Adjust the PREFIX variable if your environment has different tool names.
 Seal a file with a PCR policy.
 
 SYNTAX:
-../seal.sh -if <INFILE> -pcr <PCRS> -pcrf <PCR DATA FILE> [-ha <HANDLE>] [-of <OUTFILE>] [-h]
+./seal.sh -if <INFILE> -pcr <PCRS> -pcrf <PCR DATA FILE> [-ha <HANDLE>] [-of <OUTFILE>] [-h]
 
 EXAMPLE:
-../seal.sh -if hello.txt -pcr 16,23
+./seal.sh -if hello.txt -pcr 16,23
 
 OPTIONS:
--h|--help	OPTIONAL: Show this help page
--if|--infile	REQUIRED: Input file to seal
--pcr|--pcrlist	Comma-separated list of PCR indexes OR
+-if|--infile	Input file to seal
+-pcr|--pcrlist	Comma-separated list of PCR indexes **OR**
 -pcrf|--pcrfile	File with PCR indexes + values. See notes below.
 -ha|--handle	OPTIONAL: Handle for primary storage key. Default = 80000000
 -of|--outfile	OPTIONAL: Output file. Default = <inputfile>.sealed
+-h|--help	    OPTIONAL: Show this help page
 
 GENERAL NOTES:
 - Must be run in the TPM simulator environment.
@@ -52,17 +52,17 @@ NOTES FOR PCR FILE MODE:
 Unseal a file with a PCR policy.
 
 SYNTAX:
-../unseal.sh -if <INFILE> [-pcrf <PCR DATA FILE>] [-ha <HANDLE>] [-of <OUTFILE>] [-h]
+./unseal.sh -if <INFILE> [-pcrf <PCR DATA FILE>] [-ha <HANDLE>] [-of <OUTFILE>] [-h]
 
 EXAMPLE:
-../unseal.sh -if sealedfile
+./unseal.sh -if sealedfile
 
 OPTIONS:
--if|--infile	REQUIRED: Input file to unseal (generated with seal.sh)
+-if|--infile	Input file to unseal (generated with seal.sh)
 -pcrf|--pcrfile	File with PCR indexes + values. See notes below.
 -ha|--handle	OPTIONAL: Handle for primary storage key. Default = 80000000
 -of|--outfile	OPTIONAL: Output file. Default = <inputfile>.unsealed
--h|--help	OPTIONAL: Show this help page
+-h|--help	    OPTIONAL: Show this help page
 
 GENERAL NOTES:
 - Must be run in the TPM simulator environment.
