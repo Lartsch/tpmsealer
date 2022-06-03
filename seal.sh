@@ -43,7 +43,7 @@ OPTIONS:
 -h|--help\tOPTIONAL: Show this help page\n
 GENERAL NOTES:
 - Must be run in the TPM simulator environment.
-- There must already be a parent handler. If none is specified,default 80000000 will be used.\n
+- There must already be a parent handler. If none is specified, default 80000000 will be used.\n
 NOTES FOR PCR LIST MODE:
 - The provided indexes will be read on execution without changes values
 - Make sure the registers store the values you want before running the tool!\n

@@ -37,7 +37,7 @@ EXAMPLE:
 $0 -if sealedfile\n
 OPTIONS:
 -if|--infile\tInput file to unseal (generated with seal.sh)
--pcrf|--pcrfile\tFile with PCR indexes + values. See notes below.
+-pcrf|--pcrfile\tOPTIONAL: File with PCR indexes + values. See notes below.
 -ha|--handle\tOPTIONAL: Handle for primary storage key. Default = 80000000
 -of|--outfile\tOPTIONAL: Output file. Default = <inputfile>.unsealed
 -h|--help\tOPTIONAL: Show this help page\n
@@ -46,7 +46,7 @@ GENERAL NOTES:
 - There must already be a parent handler. If none is specified, default 80000000 will be used.\n
 NOTES FOR DEFAULT MODE:
 - The required PCR indexes will be read from the input file (archive)
-- The according will then be read without changing any values
+- The according PCRs will then be read without changing any values
 - Make sure the registers store the values you want before running the tool!\n
 NOTES FOR PCR FILE MODE (-pcrf):
 - Provide the same PCR data file you used to seal the file

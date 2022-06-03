@@ -26,7 +26,7 @@ OPTIONS:
 
 GENERAL NOTES:
 - Must be run in the TPM simulator environment.
-- There must already be a parent handler. If none is specified,default 80000000 will be used.
+- There must already be a parent handler. If none is specified, default 80000000 will be used.
 
 NOTES FOR PCR LIST MODE:
 - The provided indexes will be read on execution without changes values
@@ -59,7 +59,7 @@ EXAMPLE:
 
 OPTIONS:
 -if|--infile	Input file to unseal (generated with seal.sh)
--pcrf|--pcrfile	File with PCR indexes + values. See notes below.
+-pcrf|--pcrfile	OPTIONAL: File with PCR indexes + values. See notes below.
 -ha|--handle	OPTIONAL: Handle for primary storage key. Default = 80000000
 -of|--outfile	OPTIONAL: Output file. Default = <inputfile>.unsealed
 -h|--help	OPTIONAL: Show this help page
@@ -70,7 +70,7 @@ GENERAL NOTES:
 
 NOTES FOR DEFAULT MODE:
 - The required PCR indexes will be read from the input file (archive)
-- The according will then be read without changing any values
+- The according PCRs will then be read without changing any values
 - Make sure the registers store the values you want before running the tool!
 
 NOTES FOR PCR FILE MODE (-pcrf):
