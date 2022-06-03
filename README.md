@@ -22,7 +22,7 @@ OPTIONS:
 -pcrf|--pcrfile	File with PCR indexes + values. See notes below.
 -ha|--handle	OPTIONAL: Handle for primary storage key. Default = 80000000
 -of|--outfile	OPTIONAL: Output file. Default = <inputfile>.sealed
--h|--help   OPTIONAL: Show this help page
+-h|--help	OPTIONAL: Show this help page
 
 GENERAL NOTES:
 - Must be run in the TPM simulator environment.
